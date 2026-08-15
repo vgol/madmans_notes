@@ -1,19 +1,15 @@
-# Project Guidelines
+# Project Baseline
 
-## Project Scope
-- Treat this repository as a Python project for experimentation, notes, notebooks, and VS Code's Interactive Window.
-- Do not add package-building configuration or package layout unless the user explicitly asks to turn the project into a distributable package.
-- Keep runtime dependencies in `project.dependencies` and development tools in the appropriate uv dependency group.
-- Use the existing Python version requirement and `uv` workflow in `pyproject.toml`; do not replace it with another environment manager without a specific request.
+- Read [AGENTS.md](../AGENTS.md) first for specialist routing, delegation rules, and the distinction between instructions, skills, prompts, and custom agents.
+- Treat this repository as a Python and uv workspace for family-finance analysis, notebooks, experiments, and VS Code's Interactive Window. Use the root `.python-version` file as the source of truth for the Python version.
+- Preserve unrelated user changes and keep edits focused.
+- Do not turn the project into a distributable package unless explicitly requested.
+- Protect financial and personal data; do not commit credentials, bank exports, account identifiers, or unnecessary raw private data.
+- Use the narrowest relevant validation and report checks that could not run.
 
-## Notebooks
-- When creating or editing `.ipynb` files, preserve valid notebook JSON.
-- Every cell must be a JSON object in the top-level `cells` array with `metadata.language` set to `markdown` or `python` as appropriate.
-- Existing cells must retain a unique `metadata.id`; new cells do not require an ID.
-- Refer to notebook cells by their visible cell number in user-facing messages, never by internal cell IDs.
-- Prefer small, runnable cells that work in both a Jupyter kernel and VS Code's Interactive Window.
+## Area-Specific Guidance
 
-## Validation
-- After changing `pyproject.toml` or dependencies, run `uv lock --check` and a focused `uv sync --dry-run` when available.
-- After changing Python code, run the narrowest relevant test, lint, or type-check command.
-- Avoid modifying unrelated working-tree changes.
+- For Python and notebook files, apply [Python and Notebook Guidelines](./instructions/python.instructions.md).
+- For specialist ownership and delegation, follow the agents linked from [AGENTS.md](../AGENTS.md).
+- For repeatable workflows, use the relevant skill in [`.github/skills/`](./skills/).
+- For focused user-invoked operations, use the relevant prompt in [`.github/prompts/`](./prompts/).
