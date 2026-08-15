@@ -217,6 +217,7 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 # Project-scoped agent skills and skills-lock.json are intentionally tracked.
@@ -224,3 +225,8 @@ __marimo__/
 >>>>>>> 9e903e9 (feat: add FastAPI Python skill documentation and update related files)
 =======
 >>>>>>> 9e903e9 (feat: add FastAPI Python skill documentation and update related files)
+=======
+
+# Locally installed agent skills
+.agents/
+>>>>>>> 2acdf55 (Update Python development workflows and add .agents/ dir for 3rd-party skills to .gitignore)
