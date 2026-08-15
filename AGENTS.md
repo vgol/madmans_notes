@@ -2,6 +2,32 @@
 
 This repository is a Python and uv workspace for family-finance analysis, notebooks, experiments, etc... The supported Python version is pinned in the root `.python-version` file. The coordinating agent should use the routing rules below to select a specialist and should retain responsibility for final integration and the user-facing response.
 
+## Agent Topology
+
+The coordinator owns intake, routing, cross-domain integration, final validation, and the user-facing response. Specialists own narrow implementation or analysis slices and return structured results to the coordinator or their sending agent.
+
+```text
+Coordinator
+├── Python Developer                         [implemented, leaf]
+├── Development Infrastructure Engineer     [implemented, leaf]
+├── Agent Customization Specialist          [implemented, leaf]
+└── Documentation Engineer                  [planned, leaf]
+
+Data Finance Analyst
+└── Python Developer                         [implementation slices only]
+```
+
+| Role                                | Agent file                                              | Status      | May delegate to             |
+| ----------------------------------- | ------------------------------------------------------- | ----------- | --------------------------- |
+| Coordinator                         | The coordinating agent                                  | Active      | All implemented specialists |
+| Python Developer                    | `.github/agents/python-developer.agent.md`              | Implemented | None                        |
+| Development Infrastructure Engineer | `.github/agents/development-infra-engineer.md`          | Implemented | None                        |
+| Agent Customization Specialist      | `.github/agents/agents-customization-engineer.agent.md` | Implemented | None                        |
+| Documentation Engineer              | `.github/agents/documentation-engineer.agent.md`        | Planned     | None                        |
+| Data Finance Analyst                | `.github/agents/data-finance-analyst.agent.md`          | Implemented | Python Developer            |
+
+The `Documentation Engineer` entry is intentionally marked `planned` until its agent file exists. Do not route work to it as an active subagent before creating and validating that file.
+
 ## Routing Rules
 
 - Route family-finance questions, budgeting, cash-flow analysis, spending categorization, pandas, matplotlib, Dash, data quality, financial visualizations, and notebook-based financial exploration to `Data Finance Analyst` in `.github/agents/data-finance-analyst.agent.md`.
@@ -24,10 +50,10 @@ This repository is a Python and uv workspace for family-finance analysis, notebo
 ### Handoff Lifecycle
 
 1. The sending agent states why the receiving specialist owns the next slice.
-2. The sending agent provides the task packet and names the validation that could disprove the approach.
-3. The receiving agent edits only within the agreed scope, unless it reports a necessary scope change first.
-4. The receiving agent runs focused validation and returns the required report.
-5. The sending or coordinating agent reviews the result against the original acceptance criteria and performs cross-domain validation.
+1. The sending agent provides the task packet and names the validation that could disprove the approach.
+1. The receiving agent edits only within the agreed scope, unless it reports a necessary scope change first.
+1. The receiving agent runs focused validation and returns the required report.
+1. The sending or coordinating agent reviews the result against the original acceptance criteria and performs cross-domain validation.
 
 ### Current Handoff
 

@@ -3,6 +3,7 @@ description: "Use when creating or modifying Python files or Jupyter notebooks i
 name: "Python and Notebook Guidelines"
 applyTo: "**/*.py, **/*.ipynb"
 ---
+
 # Python and Notebook Guidelines
 
 ## Stack
@@ -13,6 +14,7 @@ applyTo: "**/*.py, **/*.ipynb"
 - Don't use `pip` or `conda`. Don't use uv pip install either.
 - This is a non-package project for experiments, notes, notebooks, and VS Code's Interactive Window.
 - Current project dependencies include `ipykernel`, `pytest`, `ruff`, and `ty`.
+- ty is the strict Python language service and type checker for this workspace; do not add Pylance or another Python language server.
 
 ## Before Editing
 
@@ -43,14 +45,28 @@ applyTo: "**/*.py, **/*.ipynb"
 
 - Validate immediately after the first substantive edit with the narrowest relevant check.
 - Use `pytest` for focused behavior and regression tests; prefer a targeted test path before the full suite.
-- Use `ruff check` for linting and `ruff format --check` when formatting is relevant.
+- Use `ruff check --fix` for safe automatic lint fixes, followed by `ruff format` for formatting.
 - Use `ty check` for type-checking when the changed code has meaningful type contracts.
+- Run `pre-commit run --all-files` when changing repository-wide Python quality configuration or before committing a broad change.
+- The standard local quality gate runs YAML validation, end-of-file and whitespace fixes, Markdown linting and formatting, Astral's `uv-lock` check, `uv run ruff check --fix`, `uv run ruff format`, `uv run ty check`, and `uv run pytest`.
 - Report unavailable commands, missing dependencies, or environment limitations instead of treating them as passing checks.
 - Do not weaken tests, lint rules, or type checks just to make validation pass.
 - Python code should be type annotated in both real python files and notebook cells.
 - Don't use or install `mypy` or other type checkers; use `ty`.
 - Don't use `typing.Any`, etc.. Prefer to use modern type hints notations, e.g. `list[str]` instead of `List[str]`, `dict[str, int]` instead of `Dict[str, int]`, etc.
 - Don't use empty type hints, e.g. `list` instead of `list[str]`, `dict` instead of `dict[str, int]`, etc. Nested types matter!
+
+## Pre-commit
+
+- Keep the repository hook definition in `.pre-commit-config.yaml`.
+- Install the project environment and hook with `uv sync` and `uv run pre-commit install`.
+- Run all hooks manually with `uv run pre-commit run --all-files`.
+- The configured hooks include standard YAML, end-of-file, and trailing-whitespace checks, followed by project-managed `ruff check --fix`, `ruff format`, ty check, and pytest.
+- The workflow also runs `markdownlint-cli2`, `mdformat` with GFM/frontmatter support, and Astral's official `uv-lock` hook.
+- The hooks invoke tools through `uv run` so local commits use the versions locked in `uv.lock`.
+- Ruff, ty, and pytest hooks run only when Python or notebook files are part of the commit; use `uv run pre-commit run --all-files` for an explicit repository-wide run.
+- Update hook revisions deliberately with `uv run pre-commit autoupdate`; review the resulting lock and configuration changes.
+- The pytest hook treats exit code 5 (no tests collected) as a passing condition while the repository has no tests; all other pytest failures remain blocking.
 
 ## Notebooks
 

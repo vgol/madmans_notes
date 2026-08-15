@@ -4,11 +4,13 @@ description: Safely modify this repository's Docker Compose-based VS Code devcon
 argument-hint: Describe the devcontainer change you want, including any required tools, versions, extensions, environment variables, or commands.
 agent: agent
 ---
+
 Modify the repository's devcontainer configuration to satisfy this request:
 
 $ARGUMENTS
 
 Before editing:
+
 - Inspect `.devcontainer/devcontainer.json`, `.devcontainer/docker-compose.yml`, `.devcontainer/Dockerfile`, `.devcontainer/test_tools.sh`, `.devcontainer/devcontainer-lock.json`, `pyproject.toml`, and `.github/copilot-instructions.md` when they exist.
 - Identify which file directly owns the requested behavior and make the smallest compatible change.
 - Preserve the current Docker Compose service and workspace wiring unless the request explicitly requires changing it.
@@ -19,6 +21,7 @@ Before editing:
 - Prefer existing devcontainer features and project conventions over adding custom installation logic.
 
 After editing:
+
 - Validate JSON, YAML, shell syntax, and TOML for every changed configuration file using available project tools.
 - Run the narrowest relevant devcontainer or tool-validation check available. For dependency or Python-version changes, run `uv lock --check` and `uv sync --dry-run` when available.
 - Review the diff for unrelated changes and preserve user modifications.

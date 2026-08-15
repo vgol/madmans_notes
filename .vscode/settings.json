@@ -1,5 +1,18 @@
 {
     "chat.tools.terminal.autoApprove": {
         "uv": true
-    }
+    },
+    "python.languageServer": "None",
+    "ty.disableLanguageServices": false,
+    "ty.diagnosticMode": "workspace",
+    "ty.importStrategy": "fromEnvironment",
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave":{
+            "source.organizeImports.ruff": "explicit",
+            "source.fixAll.ruff": "explicit"
+        }
+    },
+    "python.testing.pytestEnabled": true,
+    "python.terminal.activateEnvironment": true
 }

@@ -1,0 +1,13 @@
+{
+  "noProgress": true,
+  "frontMatter": "^---\\n[^]*?\\n---\\n",
+  "config": {
+    "default": true,
+    "MD003": {
+      "style": "atx"
+    },
+    "MD013": false,
+    "MD033": false,
+    "MD041": false
+  }
+}

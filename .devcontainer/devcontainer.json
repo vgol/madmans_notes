@@ -22,5 +22,5 @@
     "PROJECT_NAME": "Madman's Notes"
   },
   "onCreateCommand": "if [ ! -d /workspace/madmans_notes/.git ]; then git clone --branch main https://github.com/vgol/madmans_notes.git /workspace/madmans_notes; fi",
-  "postCreateCommand": "cd /workspace/madmans_notes && uv sync"
+  "postCreateCommand": "cd /workspace/madmans_notes && uv sync --all-groups"
 }

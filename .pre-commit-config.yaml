@@ -1,0 +1,54 @@
+minimum_pre_commit_version: "4.6.2"
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.23.2
+    hooks:
+      - id: markdownlint-cli2
+
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.17
+    hooks:
+      - id: mdformat
+        additional_dependencies:
+          - mdformat-gfm
+          - mdformat-frontmatter
+
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.12.5
+    hooks:
+      - id: uv-lock
+
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: Ruff check
+        entry: uv run ruff check --fix
+        language: unsupported
+        types_or: [python, jupyter]
+        pass_filenames: false
+      - id: ruff-format
+        name: Ruff format
+        entry: uv run ruff format
+        language: unsupported
+        types_or: [python, jupyter]
+        pass_filenames: false
+      - id: ty-check
+        name: ty check
+        entry: uv run ty check
+        language: unsupported
+        types_or: [python, jupyter]
+        pass_filenames: false
+      - id: pytest
+        name: pytest
+        entry: uv run pytest
+        language: unsupported
+        types_or: [python, jupyter]
+        pass_filenames: false

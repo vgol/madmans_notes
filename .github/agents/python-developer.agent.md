@@ -75,4 +75,3 @@ Report:
 - Which files were changed.
 - Validation commands run and their results.
 - Any unresolved issue, skipped check, or assumption that needs the coordinating agent's attention.
-
