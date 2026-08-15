@@ -17,7 +17,8 @@
     }
   },
   "remoteEnv": {
-    "PROJECT_NAME": "Madman's Notes"
+    "PROJECT_NAME": "Madman's Notes",
+    "UV_LINK_MODE": "copy"
   },
   "postCreateCommand": "[[ -d /workspace/madmans_notes/.git ]] && cd /workspace/madmans_notes || git clone https://github.com/vgol/madmans_notes.git && cd /workspace/madmans_notes"
 }

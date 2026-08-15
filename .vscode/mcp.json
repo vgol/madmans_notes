@@ -1,0 +1,12 @@
+{
+    "servers": {
+        "context7": {
+            "type": "stdio",
+            "command": "/home/vscode/.local/bin/npx",
+            "args": [
+                "-y",
+                "@upstash/context7-mcp"
+            ]
+        }
+    }
+}
