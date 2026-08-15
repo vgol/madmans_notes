@@ -1,12 +1,9 @@
 {
   "name": "Mandman's Notes",
-  "image": "mcr.microsoft.com/devcontainers/python:1-3.14-bookworm",
+  "image": "mcr.microsoft.com/devcontainers/base:resolute",
   "workspaceMount": "type=volume,source=madmans-notes-workspace,target=/workspace",
   "workspaceFolder": "/workspace/madmans_notes",
   "remoteUser": "vscode",
-  "features": {
-    "ghcr.io/devcontainers-extra/features/uv:1": {}
-  },
   "customizations": {
     "vscode": {
       "extensions": [
@@ -21,6 +18,5 @@
   "remoteEnv": {
     "PROJECT_NAME": "Madman's Notes"
   },
-  "onCreateCommand": "if [ ! -d /workspace/madmans_notes/.git ]; then git clone --branch main https://github.com/vgol/madmans_notes.git /workspace/madmans_notes; fi",
-  "postCreateCommand": "cd /workspace/madmans_notes && uv sync --all-groups"
+  "postCreateCommand": "[[ -d /workspace/madmans_notes/ ]] && cd /workspace/madmans_notes || echo 'Repository is not cloned into devcontainer."
 }
