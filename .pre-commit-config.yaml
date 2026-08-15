@@ -1,4 +1,5 @@
 minimum_pre_commit_version: "4.6.2"
+default_stages: [pre-commit]
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -12,11 +13,13 @@ repos:
     rev: v0.23.2
     hooks:
       - id: markdownlint-cli2
+        stages: [manual]
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.17
     hooks:
       - id: mdformat
+        stages: [manual]
         additional_dependencies:
           - mdformat-gfm
           - mdformat-frontmatter
@@ -25,6 +28,7 @@ repos:
     rev: 0.12.5
     hooks:
       - id: uv-lock
+        stages: [manual]
 
   - repo: local
     hooks:
@@ -46,9 +50,11 @@ repos:
         language: unsupported
         types_or: [python, jupyter]
         pass_filenames: false
+        stages: [manual]
       - id: pytest
         name: pytest
         entry: uv run pytest
         language: unsupported
         types_or: [python, jupyter]
         pass_filenames: false
+        stages: [manual]

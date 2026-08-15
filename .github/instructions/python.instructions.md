@@ -10,16 +10,19 @@ applyTo: "**/*.py, **/*.ipynb"
 
 - Use the Python version pinned in the repository root `.python-version` file. Treat `pyproject.toml` as the compatibility constraint and do not duplicate the pinned version in instructions.
 - Use `uv` for environments and dependencies; use the repository's existing `.venv` and lockfile.
-- Install / uninstall dependencies with `uv add` / `uv remove` and regenerate the lockfile with `uv lock`.
-- Don't use `pip` or `conda`. Don't use uv pip install either.
+- Install / uninstall dependencies with `uv add` / `uv remove` and regenerate the lock-file with `uv lock`.
+- Don't use `pip` or `conda`. Don't use `uv pip install` either.
 - This is a non-package project for experiments, notes, notebooks, and VS Code's Interactive Window.
-- Current project dependencies include `ipykernel`, `pytest`, `ruff`, and `ty`.
-- ty is the strict Python language service and type checker for this workspace; do not add Pylance or another Python language server.
+- Current project use the following products in it's dev cycle: `pytest`, `ruff`, and `ty`.
+- ty is the strict Python language service and static type checker; it provides hover, completions, go-to-definition, find-references, and type diagnostics.
+- Do not add Pylance, Pyright, or another general Python language server; `python.languageServer: "None"` in `.vscode/settings.json` suppresses Pylance. It has no effect on Ruff or ty.
+- Ruff also runs a language server (`ruff server`, always on in v2.x). This is intentional and complementary — Ruff's server handles linting diagnostics, formatting, and code actions (`source.fixAll.ruff`, `source.organizeImports.ruff`) only, with no overlap on hover, completions, or type checking. Both servers must be active for the configured `[python]` formatting and code-action-on-save workflow to function.
 
 ## Before Editing
 
 - Read the relevant source, notebook, tests, `pyproject.toml`, and nearby documentation before changing code.
-- Check `.python-version` when selecting an interpreter or diagnosing environment differences.
+- Check `.python-version` when selecting an interpreter or diagnosing environment differences - even more generally - don't change
+  Python and package versions, until asked explicitly.
 - Identify the smallest owning file or function and form a testable hypothesis about the requested behavior.
 - Preserve unrelated user changes, generated outputs, and notebook work unless the task explicitly includes them.
 
@@ -48,23 +51,25 @@ applyTo: "**/*.py, **/*.ipynb"
 - Use `ruff check --fix` for safe automatic lint fixes, followed by `ruff format` for formatting.
 - Use `ty check` for type-checking when the changed code has meaningful type contracts.
 - Run `pre-commit run --all-files` when changing repository-wide Python quality configuration or before committing a broad change.
-- The standard local quality gate runs YAML validation, end-of-file and whitespace fixes, Markdown linting and formatting, Astral's `uv-lock` check, `uv run ruff check --fix`, `uv run ruff format`, `uv run ty check`, and `uv run pytest`.
+- The fast `pre-commit` stage quality gate (every commit) runs YAML validation, end-of-file and whitespace fixes, `uv run ruff check --fix`, and `uv run ruff format`; invoke with `uv run pre-commit run --all-files`.
+- The manual stage additionally runs `uv run ty check`, `uv run pytest`, Markdown linting and formatting, and the `uv-lock` check; invoke with `uv run pre-commit run --hook-stage manual --all-files`.
 - Report unavailable commands, missing dependencies, or environment limitations instead of treating them as passing checks.
 - Do not weaken tests, lint rules, or type checks just to make validation pass.
 - Python code should be type annotated in both real python files and notebook cells.
 - Don't use or install `mypy` or other type checkers; use `ty`.
 - Don't use `typing.Any`, etc.. Prefer to use modern type hints notations, e.g. `list[str]` instead of `List[str]`, `dict[str, int]` instead of `Dict[str, int]`, etc.
-- Don't use empty type hints, e.g. `list` instead of `list[str]`, `dict` instead of `dict[str, int]`, etc. Nested types matter!
+- Do not use `object` as a vague substitute for a meaningful type; define a precise type alias or union for heterogeneous values.
+- Don't use empty hints for compound types, e.g. `list` instead of `list[str]`, `dict` instead of `dict[str, int]`, etc. Nested types matter!
 
 ## Pre-commit
 
 - Keep the repository hook definition in `.pre-commit-config.yaml`.
 - Install the project environment and hook with `uv sync` and `uv run pre-commit install`.
-- Run all hooks manually with `uv run pre-commit run --all-files`.
-- The configured hooks include standard YAML, end-of-file, and trailing-whitespace checks, followed by project-managed `ruff check --fix`, `ruff format`, ty check, and pytest.
-- The workflow also runs `markdownlint-cli2`, `mdformat` with GFM/frontmatter support, and Astral's official `uv-lock` hook.
+- The hooks are split into two stages: **`pre-commit`** (fast, runs on every commit) and **`manual`** (slower, must be invoked explicitly).
+- **`pre-commit` stage** (runs with `uv run pre-commit run --all-files` and on every `git commit`): YAML validation, end-of-file fixer, trailing-whitespace, `ruff check --fix`, `ruff format`.
+- **`manual` stage** (run with `uv run pre-commit run --hook-stage manual --all-files`): `ty check`, `pytest`, `markdownlint-cli2`, `mdformat` (GFM/frontmatter), `uv-lock`.
 - The hooks invoke tools through `uv run` so local commits use the versions locked in `uv.lock`.
-- Ruff, ty, and pytest hooks run only when Python or notebook files are part of the commit; use `uv run pre-commit run --all-files` for an explicit repository-wide run.
+- Ruff hooks run only when Python or notebook files are part of the commit; use `--all-files` for an explicit repository-wide run.
 - Update hook revisions deliberately with `uv run pre-commit autoupdate`; review the resulting lock and configuration changes.
 - The pytest hook treats exit code 5 (no tests collected) as a passing condition while the repository has no tests; all other pytest failures remain blocking.
 
@@ -97,4 +102,5 @@ When generating or editing notebook content:
 
 - For finance-specific questions, preserve the analyst's definitions, assumptions, reconciliation rules, and privacy decisions.
 - For infrastructure, VS Code, devcontainer, CI, or customization changes, route to the owning specialist instead of expanding a Python task.
+- For repeatable Python implementation and validation workflows, use [Python Development](../skills/python-development/SKILL.md).
 - When receiving a delegated implementation slice, return changed files, implementation summary, validation results, assumptions, and unresolved issues.
