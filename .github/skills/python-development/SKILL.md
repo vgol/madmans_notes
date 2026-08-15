@@ -33,13 +33,13 @@ Use this skill for repeatable Python implementation and validation in this repos
 
 Choose one named workflow based on the change:
 
-| Workflow                   | Use when                                                                | Command                                                                |
-| -------------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| Focused Python change      | A Python module or focused test changed                                 | `uv run pre-commit run --files path/to/changed.py`                     |
-| Fast commit checks         | On every commit; hygiene, Ruff lint, and Ruff format only               | `uv run pre-commit run --all-files`                                    |
-| Manual review / full check | Before review, or whenever ty, pytest, Markdown, and uv-lock are needed | `uv run pre-commit run --hook-stage manual --all-files`                |
-| Dependency change          | `pyproject.toml` or `uv.lock` changed                                   | `uv lock --check`, `uv sync --dry-run`, then the manual review check   |
-| Notebook change            | A notebook changed                                                      | `uv run pre-commit run --files path/to/notebook.ipynb`                 |
+| Workflow                   | Use when                                                                | Command                                                              |
+| -------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Focused Python change      | A Python module or focused test changed                                 | `uv run pre-commit run --files path/to/changed.py`                   |
+| Fast commit checks         | On every commit; hygiene, Ruff lint, and Ruff format only               | `uv run pre-commit run --all-files`                                  |
+| Manual review / full check | Before review, or whenever ty, pytest, Markdown, and uv-lock are needed | `uv run pre-commit run --hook-stage manual --all-files`              |
+| Dependency change          | `pyproject.toml` or `uv.lock` changed                                   | `uv lock --check`, `uv sync --dry-run`, then the manual review check |
+| Notebook change            | A notebook changed                                                      | `uv run pre-commit run --files path/to/notebook.ipynb`               |
 
 The workflow names above are skill workflows. Pre-commit supplies the executable hooks; do not create a second set of ad hoc commands for the same checks.
 
