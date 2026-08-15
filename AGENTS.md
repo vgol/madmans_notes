@@ -77,3 +77,8 @@ The `Documentation Engineer` entry is intentionally marked `planned` until its a
 - Use uv and the Python version pinned in `.python-version`; do not introduce another environment manager.
 - Protect financial and personal data. Never commit credentials, bank exports, account identifiers, or unnecessary raw private data.
 - Run the narrowest relevant validation and report checks that could not run.
+
+## TODO
+
+- Configure and test Context7 MCP.
+- Set up credentials with a secret manager.
