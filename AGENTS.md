@@ -64,6 +64,7 @@ The `Documentation Engineer` entry is intentionally marked `planned` until its a
 ## Instructions and Skills
 
 - Apply `.github/instructions/python.instructions.md` to Python and notebook files. It defines the `.python-version`-based Python, uv, code, dependency, and notebook conventions.
+- Apply `.github/instructions/ci.instructions.md` to GitHub Actions workflows and pre-commit configuration. It defines the CI workflow structure, pre-commit stages, job conventions, and label management.
 - Use an instruction file for persistent conventions that apply to a file type or area.
 - Use a skill under `.github/skills/` for a repeatable multi-step workflow with scripts, templates, or references.
 - Use a prompt under `.github/prompts/` for a focused user-invoked operation with arguments.

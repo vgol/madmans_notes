@@ -28,7 +28,7 @@ repos:
     rev: 0.12.5
     hooks:
       - id: uv-lock
-        stages: [manual]
+        stages: [pre-commit, manual]
 
   - repo: local
     hooks:
@@ -37,13 +37,13 @@ repos:
         entry: uv run ruff check --fix
         language: unsupported
         types_or: [python, jupyter]
-        pass_filenames: false
+        stages: [pre-commit, manual]
       - id: ruff-format
         name: Ruff format
         entry: uv run ruff format
         language: unsupported
         types_or: [python, jupyter]
-        pass_filenames: false
+        stages: [pre-commit, manual]
       - id: ty-check
         name: ty check
         entry: uv run ty check
@@ -53,7 +53,7 @@ repos:
         stages: [manual]
       - id: pytest
         name: pytest
-        entry: uv run pytest
+        entry: uv run pytest tests
         language: unsupported
         types_or: [python, jupyter]
         pass_filenames: false
