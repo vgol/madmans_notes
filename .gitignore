@@ -216,3 +216,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+<<<<<<< HEAD
+=======
+
+# Project-scoped agent skills and skills-lock.json are intentionally tracked.
+<<<<<<< HEAD
+>>>>>>> 9e903e9 (feat: add FastAPI Python skill documentation and update related files)
+=======
+>>>>>>> 9e903e9 (feat: add FastAPI Python skill documentation and update related files)
