@@ -16,7 +16,7 @@ git --version
 uv --version
 
 echo "==> Checking uv, its venv, Python version, and dependencies match .python-version / uv.lock"
-cd "/workspace/madmans_notes"
+# postStartCommand is invoked from workspaceFolder by the devcontainer runtime.
 if uv sync --check --locked >/tmp/uv-health-check.log 2>&1; then
   echo "[devcontainer] uv health check: Python, venv, and dependencies match .python-version and uv.lock."
 else
