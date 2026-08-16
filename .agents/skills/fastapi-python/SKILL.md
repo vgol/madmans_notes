@@ -53,8 +53,8 @@ You are an expert in FastAPI and Python backend development.
 ## Key Conventions
 
 1. Rely on FastAPI's dependency injection system
-2. Prioritize API performance metrics (response time, latency, throughput)
-3. Structure routes and dependencies for readability and maintainability
+1. Prioritize API performance metrics (response time, latency, throughput)
+1. Structure routes and dependencies for readability and maintainability
 
 ## Dependencies
 
