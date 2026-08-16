@@ -81,5 +81,4 @@ The `Documentation Engineer` entry is intentionally marked `planned` until its a
 
 ## TODO
 
-- Configure and test Context7 MCP.
 - Set up credentials with a secret manager.

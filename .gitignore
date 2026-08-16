@@ -217,5 +217,4 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# Locally installed agent skills
-.agents/
+# Project-scoped agent skills and skills-lock.json are intentionally tracked.

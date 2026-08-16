@@ -14,3 +14,10 @@
 - For specialist ownership and delegation, follow the agents linked from [AGENTS.md](../AGENTS.md).
 - For repeatable workflows, use the relevant skill in [`.github/skills/`](./skills/).
 - For focused user-invoked operations, use the relevant prompt in [`.github/prompts/`](./prompts/).
+
+## Context7 MCP Usage
+
+- Context7 MCP is available through the workspace server configured in [`.vscode/mcp.json`](../.vscode/mcp.json).
+- Use it conditionally for current or version-specific library, framework, SDK, API, CLI, or cloud-service documentation.
+- Resolve the library ID with `resolve-library-id` before calling `query-docs`, unless the user provides an exact Context7 library ID.
+- Do not use Context7 for ordinary local refactoring, business-logic debugging, code review, or general programming concepts when repository context is sufficient.
