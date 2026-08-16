@@ -12,7 +12,7 @@
 - For Python and notebook files, apply [Python and Notebook Guidelines](./instructions/python.instructions.md).
 - For GitHub Actions workflows and pre-commit configuration, apply [CI Workflow Guidelines](./instructions/ci.instructions.md).
 - For specialist ownership and delegation, follow the agents linked from [AGENTS.md](../AGENTS.md).
-- For repeatable workflows, use the relevant skill in [`.github/skills/`](./skills/).
+- For repeatable workflows, use the relevant skill in [`.github/skills/`](./skills/) (first-party) or [`.agents/skills/`](../.agents/skills/) (third-party, managed via [`skills-lock.json`](../skills-lock.json)).
 - For focused user-invoked operations, use the relevant prompt in [`.github/prompts/`](./prompts/).
 
 ## Context7 MCP Usage

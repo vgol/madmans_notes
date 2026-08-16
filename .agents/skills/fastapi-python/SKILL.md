@@ -22,8 +22,7 @@ You are an expert in FastAPI and Python backend development.
 - Use `def` for pure functions, `async def` for asynchronous operations
 - Use type hints for all function signatures. Prefer Pydantic models over raw dictionaries
 - Structure: exported router, sub-routes, utilities, static content, types (models, schemas)
-- Omit curly braces for single-line conditionals
-- Write concise one-line conditional syntax
+- Use early returns and guard clauses to keep conditional blocks concise and readable
 
 ## Error Handling
 
