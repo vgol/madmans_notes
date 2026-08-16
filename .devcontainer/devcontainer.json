@@ -1,8 +1,12 @@
 {
   "name": "Mandman's Notes",
-  "image": "mcr.microsoft.com/devcontainers/base:resolute",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
   "workspaceMount": "type=volume,source=madmans-notes-workspace,target=/workspace",
   "workspaceFolder": "/workspace/madmans_notes",
+
   "remoteUser": "vscode",
   "customizations": {
     "vscode": {
@@ -12,13 +16,17 @@
         "ms-toolsai.jupyter",
         "ms-python.debugpy",
         "astral-sh.ty",
-        "tamasfe.even-better-toml"
+        "tamasfe.even-better-toml",
+        "ms-toolsai.datawrangler"
       ]
     }
   },
   "remoteEnv": {
     "PROJECT_NAME": "Madman's Notes",
-    "UV_LINK_MODE": "copy"
+    "UV_LINK_MODE": "copy",
+    "VIRTUAL_ENV": "/workspace/madmans_notes/.venv",
+    "PATH": "/workspace/madmans_notes/.venv/bin:${containerEnv:PATH}"
   },
-  "postCreateCommand": "[[ -d /workspace/madmans_notes/.git ]] && cd /workspace/madmans_notes || git clone https://github.com/vgol/madmans_notes.git && cd /workspace/madmans_notes"
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "bash .devcontainer/health-check.sh"
 }
