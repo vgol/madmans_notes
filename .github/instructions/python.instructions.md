@@ -51,11 +51,10 @@ applyTo: "**/*.py, **/*.ipynb"
 - Use `ruff check --fix` for safe automatic lint fixes, followed by `ruff format` for formatting.
 - Use `ty check` for type-checking when the changed code has meaningful type contracts.
 - Run `pre-commit run --all-files` when changing repository-wide Python quality configuration or before committing a broad change.
-- The fast `pre-commit` stage quality gate (every commit) runs YAML validation, end-of-file and whitespace fixes, `uv run ruff check --fix`, and `uv run ruff format`; invoke with `uv run pre-commit run --all-files`.
-- The `lint-format` stage additionally runs Markdown linting and formatting alongside Ruff; invoke with `uv run pre-commit run --hook-stage lint-format --all-files`.
-- The `type-check` stage runs `uv run ty check`; invoke with `uv run pre-commit run --hook-stage type-check --all-files`.
-- The `unit-tests` stage runs `uv run pytest tests`; invoke with `uv run pre-commit run --hook-stage unit-tests --all-files`.
-- The `manual` stage runs the `uv-lock` check; invoke with `uv run pre-commit run --hook-stage manual --all-files`.
+- The `pre-commit` stage quality gate (every commit) runs YAML validation, end-of-file and whitespace fixes, `uv run ruff check --fix`, `uv run ruff format`, and `uv-lock`; invoke with `uv run pre-commit run --all-files`.
+- For lint/format parity with CI, run `ruff-check`, `ruff-format`, `markdownlint-cli2`, and `mdformat` via `uv run pre-commit run <hook-id> --hook-stage manual --all-files`.
+- For type-check parity with CI, run `uv run pre-commit run ty-check --hook-stage manual --all-files`.
+- For unit-test parity with CI, run `uv run pre-commit run pytest --hook-stage manual --all-files`.
 - Report unavailable commands, missing dependencies, or environment limitations instead of treating them as passing checks.
 - Do not weaken tests, lint rules, or type checks just to make validation pass.
 - Python code should be type annotated in both real python files and notebook cells.
@@ -68,12 +67,9 @@ applyTo: "**/*.py, **/*.ipynb"
 
 - Keep the repository hook definition in `.pre-commit-config.yaml`.
 - Install the project environment and hook with `uv sync` and `uv run pre-commit install`.
-- The hooks are split into five stages: **`pre-commit`** (fast, runs on every commit), **`lint-format`**, **`type-check`**, **`unit-tests`** (mirrors CI jobs), and **`manual`** (on-demand extras).
-- **`pre-commit` stage** (runs with `uv run pre-commit run --all-files` and on every `git commit`): YAML validation, end-of-file fixer, trailing-whitespace, `ruff check --fix`, `ruff format`.
-- **`lint-format` stage** (run with `uv run pre-commit run --hook-stage lint-format --all-files`): `ruff check --fix`, `ruff format`, `markdownlint-cli2`, `mdformat` (GFM/frontmatter).
-- **`type-check` stage** (run with `uv run pre-commit run --hook-stage type-check --all-files`): `ty check`.
-- **`unit-tests` stage** (run with `uv run pre-commit run --hook-stage unit-tests --all-files`): `pytest tests`.
-- **`manual` stage** (run with `uv run pre-commit run --hook-stage manual --all-files`): `uv-lock`.
+- The hooks use two stages: **`pre-commit`** (runs on every commit) and **`manual`** (on-demand and CI hook-id runs).
+- **`pre-commit` stage** (runs with `uv run pre-commit run --all-files` and on every `git commit`): YAML validation, end-of-file fixer, trailing-whitespace, `ruff check --fix`, `ruff format`, `uv-lock`.
+- **`manual` stage** is used for CI parity commands and explicit local runs: `ruff-check`, `ruff-format`, `markdownlint-cli2`, `mdformat`, `ty-check`, `pytest`, `uv-lock`.
 - The hooks invoke tools through `uv run` so local commits use the versions locked in `uv.lock`.
 - Ruff hooks run only when Python or notebook files are part of the commit; use `--all-files` for an explicit repository-wide run.
 - Update hook revisions deliberately with `uv run pre-commit autoupdate`; review the resulting lock and configuration changes.

@@ -25,25 +25,25 @@ File: `.github/workflows/ci-pr-check.yml`
 
 ### Three Independent Jobs
 
-The workflow is deliberately split into three independent jobs so each stage can be inspected, re-run, or skipped in isolation.
+The workflow is deliberately split into three independent jobs so each gate can be inspected, re-run, or skipped in isolation.
 
-| Job | Stage name | Tools run | Label added on success |
-|-----|-----------|-----------|------------------------|
-| `lint-format` | `lint-format` | `markdownlint-cli2`, `mdformat`, `ruff check --fix`, `ruff format` | `✅ ruff` |
-| `type-check` | `type-check` | `ty check` | `✅ ty` |
-| `unit-tests` | `unit-tests` | `pytest tests` | `✅ pytest` |
+| Job | Pre-commit invocation(s) | Tools run | Label added on success |
+|-----|-------------------------|-----------|------------------------|
+| `lint-format` | `pre-commit run ruff-check`, `pre-commit run ruff-format`, `pre-commit run markdownlint-cli2`, `pre-commit run mdformat` (all with `--hook-stage manual --all-files`) | `markdownlint-cli2`, `mdformat`, `ruff check --fix`, `ruff format` | `✅ ruff` |
+| `type-check` | `pre-commit run ty-check --hook-stage manual --all-files` | `ty check` | `✅ ty` |
+| `unit-tests` | `pre-commit run pytest --hook-stage manual --all-files` | `pytest tests` | `✅ pytest` |
 
 Each job:
 1. Checks out the repository.
 2. Sets up Python using the version in `.python-version`.
 3. Installs uv at the pinned version and restores the uv cache.
 4. Runs `uv sync --locked` to reproduce the exact locked environment.
-5. Invokes `uv run pre-commit run --hook-stage <stage> --all-files --show-diff-on-failure`.
+5. Invokes the stage-specific pre-commit hook(s) with `--all-files --show-diff-on-failure`.
 6. On success for a pull request event, adds the corresponding colored label via `actions/github-script`.
 
 ### Permissions
 
-The workflow requires `pull-requests: write` to add labels. Content access uses `contents: read`.
+The workflow requires `issues: write` and `pull-requests: write` to add labels. Content access uses `contents: read`.
 
 ### Action Pins
 
@@ -61,13 +61,10 @@ Never use floating tags (`@v3`, `@main`) in production workflows.
 
 | Stage | When it runs | Hooks included |
 |-------|-------------|----------------|
-| `pre-commit` (default) | On every `git commit` | YAML check, end-of-file fixer, trailing-whitespace, `ruff check --fix`, `ruff format` |
-| `lint-format` | CI lint-format job; `uv run pre-commit run --hook-stage lint-format --all-files` | `markdownlint-cli2`, `mdformat`, `ruff check --fix`, `ruff format` |
-| `type-check` | CI type-check job; `uv run pre-commit run --hook-stage type-check --all-files` | `ty check` |
-| `unit-tests` | CI unit-tests job; `uv run pre-commit run --hook-stage unit-tests --all-files` | `pytest tests` |
-| `manual` | Explicit on-demand; `uv run pre-commit run --hook-stage manual --all-files` | `uv-lock` |
+| `pre-commit` (default) | On every `git commit` | YAML check, end-of-file fixer, trailing-whitespace, `ruff check --fix`, `ruff format`, `uv-lock` |
+| `manual` | Explicit on-demand and CI job-specific hook runs | `ruff check --fix`, `ruff format`, `markdownlint-cli2`, `mdformat`, `ty check`, `pytest tests`, `uv-lock` |
 
-The `pre-commit` stage is the **fast local gate** and must stay quick (< 10 s). The three named CI stages mirror the three CI jobs and can be invoked locally for debugging.
+The `pre-commit` stage is the local commit-time gate. CI jobs invoke specific hook IDs with `--hook-stage manual` so they do not run unrelated manual hooks.
 
 ### Running Stages Locally
 
@@ -75,20 +72,24 @@ The `pre-commit` stage is the **fast local gate** and must stay quick (< 10 s). 
 # Fast commit gate (runs automatically on git commit)
 uv run pre-commit run --all-files
 
-# Lint & formatting stage (mirrors CI lint-format job)
-uv run pre-commit run --hook-stage lint-format --all-files
+# Lint & formatting hooks (mirror CI lint-format job)
+uv run pre-commit run ruff-check --hook-stage manual --all-files
+uv run pre-commit run ruff-format --hook-stage manual --all-files
+uv run pre-commit run markdownlint-cli2 --hook-stage manual --all-files
+uv run pre-commit run mdformat --hook-stage manual --all-files
 
 # Type checking (mirrors CI type-check job)
-uv run pre-commit run --hook-stage type-check --all-files
+uv run pre-commit run ty-check --hook-stage manual --all-files
 
 # Unit tests (mirrors CI unit-tests job)
-uv run pre-commit run --hook-stage unit-tests --all-files
+uv run pre-commit run pytest --hook-stage manual --all-files
 ```
 
 ### Hook Conventions
 
 - All hooks use `language: unsupported` with `uv run <tool>` entry points so they rely on the uv-managed virtual environment rather than a pre-commit-managed environment.
-- Ruff and pytest hooks have `pass_filenames: false`; they operate on the whole project but are gated by `types_or: [python, jupyter]` so they only trigger when relevant files are staged.
+- Ruff hooks run on changed Python and notebook files in the `pre-commit` stage and on all files when invoked with `--all-files`.
+- pytest and ty hooks use `pass_filenames: false` and run on all files when invoked from CI or local manual runs.
 - `ty check` runs on all files for consistency regardless of which files changed.
 - Never pin tool versions directly in hook entries; versions are controlled by `uv.lock`.
 
