@@ -27,19 +27,20 @@ File: `.github/workflows/ci-pr-check.yml`
 
 The workflow is deliberately split into three independent jobs so each gate can be inspected, re-run, or skipped in isolation.
 
-| Job | Pre-commit invocation(s) | Tools run | Label added on success |
-|-----|-------------------------|-----------|------------------------|
-| `lint-format` | `pre-commit run ruff-check`, `pre-commit run ruff-format`, `pre-commit run markdownlint-cli2`, `pre-commit run mdformat` (all with `--hook-stage manual --all-files`) | `markdownlint-cli2`, `mdformat`, `ruff check --fix`, `ruff format` | `✅ ruff` |
-| `type-check` | `pre-commit run ty-check --hook-stage manual --all-files` | `ty check` | `✅ ty` |
-| `unit-tests` | `pre-commit run pytest --hook-stage manual --all-files` | `pytest tests` | `✅ pytest` |
+| Job           | Pre-commit invocation(s)                                                                                                                                              | Tools run                                                          | Label added on success |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------- |
+| `lint-format` | `pre-commit run ruff-check`, `pre-commit run ruff-format`, `pre-commit run markdownlint-cli2`, `pre-commit run mdformat` (all with `--hook-stage manual --all-files`) | `markdownlint-cli2`, `mdformat`, `ruff check --fix`, `ruff format` | `✅ ruff`              |
+| `type-check`  | `pre-commit run ty-check --hook-stage manual --all-files`                                                                                                             | `ty check`                                                         | `✅ ty`                |
+| `unit-tests`  | `pre-commit run pytest --hook-stage manual --all-files`                                                                                                               | `pytest tests`                                                     | `✅ pytest`            |
 
 Each job:
+
 1. Checks out the repository.
-2. Sets up Python using the version in `.python-version`.
-3. Installs uv at the pinned version and restores the uv cache.
-4. Runs `uv sync --locked` to reproduce the exact locked environment.
-5. Invokes the stage-specific pre-commit hook(s) with `--all-files --show-diff-on-failure`.
-6. On success for a pull request event, adds the corresponding colored label via `actions/github-script`.
+1. Sets up Python using the version in `.python-version`.
+1. Installs uv at the pinned version and restores the uv cache.
+1. Runs `uv sync --locked` to reproduce the exact locked environment.
+1. Invokes the stage-specific pre-commit hook(s) with `--all-files --show-diff-on-failure`.
+1. On success for a pull request event, adds the corresponding colored label via `actions/github-script`.
 
 ### Permissions
 
@@ -59,10 +60,10 @@ Never use floating tags (`@v3`, `@main`) in production workflows.
 
 ### Stages
 
-| Stage | When it runs | Hooks included |
-|-------|-------------|----------------|
-| `pre-commit` (default) | On every `git commit` | YAML check, end-of-file fixer, trailing-whitespace, `ruff check --fix`, `ruff format`, `uv-lock` |
-| `manual` | Explicit on-demand and CI job-specific hook runs | `ruff check --fix`, `ruff format`, `markdownlint-cli2`, `mdformat`, `ty check`, `pytest tests`, `uv-lock` |
+| Stage                  | When it runs                                     | Hooks included                                                                                                 |
+| ---------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| `pre-commit` (default) | On every `git commit`                            | YAML check, end-of-file fixer, trailing-whitespace, `ruff check --fix`, `ruff format`, `uv-lock`             |
+| `manual`               | Explicit on-demand and CI job-specific hook runs | `ruff check --fix`, `ruff format`, `markdownlint-cli2`, `mdformat`, `ty check`, `pytest tests`, `uv-lock` |
 
 The `pre-commit` stage is the local commit-time gate. CI jobs invoke specific hook IDs with `--hook-stage manual` so they do not run unrelated manual hooks.
 
@@ -97,10 +98,10 @@ uv run pre-commit run pytest --hook-stage manual --all-files
 
 The three labels added by the workflow must exist in the repository before the workflow runs:
 
-| Label | Suggested color |
-|-------|----------------|
-| `✅ ruff` | `#2ea44f` (green) |
-| `✅ ty` | `#0075ca` (blue) |
+| Label       | Suggested color    |
+| ----------- | ------------------ |
+| `✅ ruff`   | `#2ea44f` (green)  |
+| `✅ ty`     | `#0075ca` (blue)   |
 | `✅ pytest` | `#e4e669` (yellow) |
 
 Labels are created once via the GitHub UI or the API. The workflow only adds labels; it does not remove them. Stale labels from previous runs are the responsibility of the PR author or reviewer.
