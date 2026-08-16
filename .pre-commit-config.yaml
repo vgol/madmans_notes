@@ -13,13 +13,13 @@ repos:
     rev: v0.23.2
     hooks:
       - id: markdownlint-cli2
-        stages: [manual]
+        stages: [lint-format]
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.17
     hooks:
       - id: mdformat
-        stages: [manual]
+        stages: [lint-format]
         additional_dependencies:
           - mdformat-gfm
           - mdformat-frontmatter
@@ -38,23 +38,25 @@ repos:
         language: unsupported
         types_or: [python, jupyter]
         pass_filenames: false
+        stages: [pre-commit, lint-format]
       - id: ruff-format
         name: Ruff format
         entry: uv run ruff format
         language: unsupported
         types_or: [python, jupyter]
         pass_filenames: false
+        stages: [pre-commit, lint-format]
       - id: ty-check
         name: ty check
         entry: uv run ty check
         language: unsupported
         types_or: [python, jupyter]
         pass_filenames: false
-        stages: [manual]
+        stages: [type-check]
       - id: pytest
         name: pytest
-        entry: uv run pytest
+        entry: uv run pytest tests
         language: unsupported
         types_or: [python, jupyter]
         pass_filenames: false
-        stages: [manual]
+        stages: [unit-tests]
