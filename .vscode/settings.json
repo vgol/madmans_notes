@@ -17,5 +17,6 @@
     "python.terminal.activateEnvironment": true,
     "terminal.integrated.env.linux": {
         "PATH": "/home/vscode/.nvm/versions/node/v24.19.0/bin:${env:PATH}"
-    }
+    },
+    "chat.editing.explainChanges.enabled": true
 }
