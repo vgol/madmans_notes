@@ -1,15 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_DIR="/workspace/madmans_notes"
-REPO_URL="https://github.com/vgol/madmans_notes.git"
-
-if [ -d "$REPO_DIR/.git" ]; then
-  cd "$REPO_DIR"
-else
-  git clone "$REPO_URL" "$REPO_DIR"
-  cd "$REPO_DIR"
-fi
+# The repository is bind-mounted at workspaceFolder by the devcontainer runtime
+# (devcontainers/ci in CI, VS Code Dev Containers locally). No manual clone needed.
+# postCreateCommand is invoked from workspaceFolder, so no explicit cd is needed.
 
 uv python install
 uv venv --clear

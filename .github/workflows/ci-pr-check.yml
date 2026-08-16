@@ -10,6 +10,10 @@ permissions:
   contents: read
   issues: write
   pull-requests: write
+  packages: write
+
+env:
+  DEVCONTAINER_IMAGE: ghcr.io/${{ github.repository }}/devcontainer
 
 jobs:
   lint-format:
@@ -19,26 +23,23 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      - name: Log in to GHCR for layer caching
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
         with:
-          python-version-file: ".python-version"
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+      - name: Run linters and formatters inside devcontainer
+        uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3
         with:
-          version: "0.12.5"
-          enable-cache: true
-
-      - name: Synchronize environment
-        run: uv sync --locked
-
-      - name: Run linters and formatters
-        run: |
-          uv run pre-commit run ruff-check --hook-stage manual --all-files --show-diff-on-failure
-          uv run pre-commit run ruff-format --hook-stage manual --all-files --show-diff-on-failure
-          uv run pre-commit run markdownlint-cli2 --hook-stage manual --all-files --show-diff-on-failure
-          uv run pre-commit run mdformat --hook-stage manual --all-files --show-diff-on-failure
+          imageName: ${{ env.DEVCONTAINER_IMAGE }}
+          cacheFrom: ${{ env.DEVCONTAINER_IMAGE }}
+          runCmd: |
+            uv run pre-commit run ruff-check --hook-stage manual --all-files --show-diff-on-failure
+            uv run pre-commit run ruff-format --hook-stage manual --all-files --show-diff-on-failure
+            uv run pre-commit run markdownlint-cli2 --hook-stage manual --all-files --show-diff-on-failure
+            uv run pre-commit run mdformat --hook-stage manual --all-files --show-diff-on-failure
 
       - name: Add Ruff label on success
         if: success() && github.event_name == 'pull_request'
@@ -59,22 +60,19 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      - name: Log in to GHCR for layer caching
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
         with:
-          python-version-file: ".python-version"
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+      - name: Run ty type check inside devcontainer
+        uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3
         with:
-          version: "0.12.5"
-          enable-cache: true
-
-      - name: Synchronize environment
-        run: uv sync --locked
-
-      - name: Run ty type check
-        run: uv run pre-commit run ty-check --hook-stage manual --all-files --show-diff-on-failure
+          imageName: ${{ env.DEVCONTAINER_IMAGE }}
+          cacheFrom: ${{ env.DEVCONTAINER_IMAGE }}
+          runCmd: uv run pre-commit run ty-check --hook-stage manual --all-files --show-diff-on-failure
 
       - name: Add Ty label on success
         if: success() && github.event_name == 'pull_request'
@@ -95,22 +93,19 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      - name: Log in to GHCR for layer caching
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
         with:
-          python-version-file: ".python-version"
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+      - name: Run unit tests inside devcontainer
+        uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3
         with:
-          version: "0.12.5"
-          enable-cache: true
-
-      - name: Synchronize environment
-        run: uv sync --locked
-
-      - name: Run unit tests
-        run: uv run pre-commit run pytest --hook-stage manual --all-files --show-diff-on-failure
+          imageName: ${{ env.DEVCONTAINER_IMAGE }}
+          cacheFrom: ${{ env.DEVCONTAINER_IMAGE }}
+          runCmd: uv run pre-commit run pytest --hook-stage manual --all-files --show-diff-on-failure
 
       - name: Add Pytest label on success
         if: success() && github.event_name == 'pull_request'
@@ -123,3 +118,4 @@ jobs:
               issue_number: context.issue.number,
               labels: ['✅ pytest']
             });
+

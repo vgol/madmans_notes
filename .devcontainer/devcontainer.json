@@ -4,8 +4,7 @@
     "dockerfile": "Dockerfile",
     "context": ".."
   },
-  "workspaceMount": "type=volume,source=madmans-notes-workspace,target=/workspace",
-  "workspaceFolder": "/workspace/madmans_notes",
+  "workspaceFolder": "/workspaces/madmans_notes",
 
   "remoteUser": "vscode",
   "customizations": {
@@ -24,8 +23,8 @@
   "remoteEnv": {
     "PROJECT_NAME": "Madman's Notes",
     "UV_LINK_MODE": "copy",
-    "VIRTUAL_ENV": "/workspace/madmans_notes/.venv",
-    "PATH": "/workspace/madmans_notes/.venv/bin:${containerEnv:PATH}"
+    "VIRTUAL_ENV": "/workspaces/madmans_notes/.venv",
+    "PATH": "/workspaces/madmans_notes/.venv/bin:${containerEnv:PATH}"
   },
   "postCreateCommand": "bash .devcontainer/post-create.sh",
   "postStartCommand": "bash .devcontainer/health-check.sh"
