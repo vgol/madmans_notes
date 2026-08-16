@@ -60,9 +60,9 @@ Never use floating tags (`@v3`, `@main`) in production workflows.
 
 ### Stages
 
-| Stage                  | When it runs                                     | Hooks included                                                                                                 |
-| ---------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
-| `pre-commit` (default) | On every `git commit`                            | YAML check, end-of-file fixer, trailing-whitespace, `ruff check --fix`, `ruff format`, `uv-lock`             |
+| Stage                  | When it runs                                     | Hooks included                                                                                            |
+| ---------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| `pre-commit` (default) | On every `git commit`                            | YAML check, end-of-file fixer, trailing-whitespace, `ruff check --fix`, `ruff format`, `uv-lock`          |
 | `manual`               | Explicit on-demand and CI job-specific hook runs | `ruff check --fix`, `ruff format`, `markdownlint-cli2`, `mdformat`, `ty check`, `pytest tests`, `uv-lock` |
 
 The `pre-commit` stage is the local commit-time gate. CI jobs invoke specific hook IDs with `--hook-stage manual` so they do not run unrelated manual hooks.
