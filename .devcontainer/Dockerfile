@@ -13,7 +13,7 @@ USER root
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends nodejs npm gh \
     && rm -rf /var/lib/apt/lists/* \
-    && npm install --global @github/copilot @devcontainers/cli \
+    && npm install --global @github/copilot@1.0.80 @devcontainers/cli@0.88.0 \
     && node --version \
     && npm --version \
     && npx --version \
@@ -23,8 +23,10 @@ RUN apt-get update \
 
 USER ${USERNAME}
 
-# Install uv via the official recommended installer script (always latest release).
+ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
+
+# Install uv at the pinned version and put it on PATH for subsequent commands.
 # Fail fast if either git or uv are missing
 RUN git --version && \
-    curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    curl -LsSf https://astral.sh/uv/0.12.5/install.sh | sh && \
     uv --version
