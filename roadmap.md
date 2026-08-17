@@ -8,13 +8,13 @@ for exploration in Jupyter notebooks.
 ## Data pipeline
 
 1. Import CSV and PDF statements from a private Google Drive location.
-2. Parse each supported bank format while preserving immutable source files outside version control.
-3. Convert records into a common transaction model with account aliases, dates, signed amounts, currencies,
+1. Parse each supported bank format while preserving immutable source files outside version control.
+1. Convert records into a common transaction model with account aliases, dates, signed amounts, currencies,
    descriptions, source hashes, and transformation metadata.
-4. Apply deterministic mutators for cleanup, merchant normalization, transfer matching, deduplication, and
+1. Apply deterministic mutators for cleanup, merchant normalization, transfer matching, deduplication, and
    rule-based categorization.
-5. Validate totals, statement overlaps, missing periods, currencies, and opening/closing balance reconciliation.
-6. Export normalized JSON or JSONL for notebook analysis.
+1. Validate totals, statement overlaps, missing periods, currencies, and opening/closing balance reconciliation.
+1. Export normalized JSON or JSONL for notebook analysis.
 
 ## Notebook analysis
 
