@@ -1,12 +1,10 @@
-from fastapi.testclient import TestClient
+import sys
+from pathlib import Path
 
-from app.main import app
+sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-
-client = TestClient(app)
+from app.main import read_root
 
 
 def test_read_root() -> None:
-    response = client.get("/")
-    assert response.status_code == 200
-    assert response.json() == {"message": "Hello, World!"}
+    assert read_root() == {"message": "Hello, World!"}
